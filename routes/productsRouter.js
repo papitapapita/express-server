@@ -1,7 +1,10 @@
 import express from 'express';
-import products from '../utils/products.js';
+import { ProductsService } from '../services/productsService';
+import { tryCatch } from '../utils/tryCatch';
 
 const router = express.Router();
+const productsService = new ProductsService();
+const { products } = productsService;
 
 router.get('/', (req, res) => {
   let { size } = req.query;
@@ -10,46 +13,48 @@ router.get('/', (req, res) => {
   if (size >= products.length || !size) {
     res.json(products);
   } else {
-    res.json(products.slice(0, size));
+    res.json(productsService.getProducts(size));
   }
 });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  res.json(products.find((product) => product.id == id));
+  const product = productsService.getProductById(id);
+
+  if (!product) {
+    res.status(404).json({
+      message: 'not found'
+    });
+    return;
+  }
+
+  res.status(200).json(product);
 });
 
 router.post('/', (req, res) => {
-  const { body } = req;
-  res.json({
-    message: 'created',
-    data: body
+  tryCatch(res, () => {
+    const { body } = req;
+    productsService.createProduct(body);
+
+    res.status(201).json({
+      message: 'created',
+      data: body
+    });
   });
 });
 
 router.put('/:id', (req, res) => {
-  try {
+  tryCatch(res, () => {
     const { id } = req.params;
-    const productIndex = products.findIndex(
-      (product) => product.id == id
-    );
-
-    if (productIndex == -1) res.status(400);
-
     const { body } = req;
 
-    console.log(body);
+    productsService.replaceProduct(id, body);
 
-    products[productIndex] = body;
-
-    res.json({
+    res.status(214).json({
       message: 'modified',
-      data: products[productIndex]
+      data: body
     });
-  } catch (error) {
-    console.error(error);
-  }
+  });
 });
 
 router.patch('/:id', (req, res) => {
@@ -59,7 +64,10 @@ router.patch('/:id', (req, res) => {
       (product) => product.id == id
     );
 
-    if (productIndex == -1) res.status(400);
+    if (productIndex == -1) {
+      res.status(400);
+      return;
+    }
 
     const { body } = req;
 
@@ -67,7 +75,7 @@ router.patch('/:id', (req, res) => {
       products[productIndex][prop] = body[prop];
     }
 
-    res.json({
+    res.status(214).json({
       message: 'modified',
       data: products[productIndex]
     });
