@@ -1,6 +1,6 @@
 import express from 'express';
-import { ProductsService } from '../services/productsService';
-import { tryCatch } from '../utils/tryCatch';
+import { ProductsService } from '../services/productsService.js';
+import { tryCatch } from '../utils/tryCatch.js';
 
 const router = express.Router();
 const productsService = new ProductsService();

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { Product } from '../models/product';
-import { ProductValidationError } from '../errors/errors';
+import { Product } from '../models/product.js';
+import { ProductValidationError } from '../errors/errors.js';
 
 export class ProductsService {
   constructor() {
@@ -21,11 +21,11 @@ export class ProductsService {
     }
   }
 
-  getProducts(amount) {
+  getAll(amount) {
     return this.products.slice(0, amount);
   }
 
-  getProductById(id) {
+  findById(id) {
     return this.products.find(
       (product) => product.id == id
     );
@@ -37,11 +37,11 @@ export class ProductsService {
     );
   }
 
-  createProduct(product) {
+  create(product) {
     this.products.push(this.verifyProduct(product));
   }
 
-  verifyProduct(product) {
+  validate(product) {
     if (Object.keys(product) > 4) {
       throw new ProductValidationError();
     }
@@ -59,5 +59,26 @@ export class ProductsService {
     return product;
   }
 
-  replaceProduct(id, product) {}
+  replace(id, product) {
+    const productIndex = this.products.findIndex(
+      (product) => product.id == id
+    );
+
+    this.products[productIndex] =
+      this.verifyProduct(product);
+  }
+
+  update(id, data) {
+    const productIndex = this.products.findIndex(
+      (product) => product.id == id
+    );
+
+    this.products[productIndex] = this.data;
+  }
+
+  delete(id) {
+    const productIndex = this.products.findIndex(
+      (product) => product.id == id
+    );
+  }
 }
