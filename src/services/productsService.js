@@ -3,12 +3,14 @@ import { Product } from '../models/product.js';
 import { ProductValidationError } from '../errors/errors.js';
 
 export class ProductsService {
-  constructor() {
-    this.products = [];
-    this.generate();
+  constructor(products = this.generate()) {
+    this.products =
+      products.length > 0 ? products : this.generate();
   }
 
   generate() {
+    const products = [];
+
     for (let i = 0; i < 100; i++) {
       this.products.push(
         new Product(
@@ -19,6 +21,8 @@ export class ProductsService {
         )
       );
     }
+
+    return products;
   }
 
   getAll(amount) {
@@ -27,31 +31,32 @@ export class ProductsService {
 
   findById(id) {
     return this.products.find(
-      (product) => product.id == id
+      (product) => product.id === id
     );
   }
 
   findIndexById(id) {
     return this.products.findIndex(
-      (product) => product.id == id
+      (product) => product.id === id
     );
   }
 
-  create(product) {
-    this.products.push(this.verifyProduct(product));
-  }
-
   validate(product) {
-    if (Object.keys(product) > 4) {
-      throw new ProductValidationError();
+    const requiredProperties = Object.keys(new Product());
+    const productKeys = Object.keys(product);
+
+    if (productKeys.length > requiredProperties.length) {
+      throw new ProductValidationError(
+        `Too many properties: ${productKeys}`
+      );
     }
 
-    const requiredProperties = Object.keys(new Product());
-
     for (let prop of requiredProperties) {
-      if (!Object.hasOwn(product, prop)) {
+      if (
+        !Object.prototype.hasOwnProperty.call(product, prop)
+      ) {
         throw new ProductValidationError(
-          `Object lacks ${prop}`
+          `Missing property: ${prop}`
         );
       }
     }
@@ -59,33 +64,59 @@ export class ProductsService {
     return product;
   }
 
+  create(product) {
+    const validatedProduct = this.validate(product);
+    this.products.push(validatedProduct);
+  }
+
   replace(id, product) {
-    const productIndex = this.products.findIndex(
-      (product) => product.id == id
-    );
+    const productIndex = this.findIndexById(id);
 
     if (productIndex === -1) {
-      throw new Error(`Product with ID ${id} not found`);
+      throw new ProductValidationError(
+        `Product with ID ${id} not found`
+      );
     }
 
-    const verifiedProduct = this.verifyProduct(product);
-    this.products[productIndex] = {
+    const validatedProduct = this.validate({
       id,
-      ...verifiedProduct
-    };
+      ...product
+    });
+    this.products[productIndex] = validatedProduct;
   }
 
   update(id, data) {
-    const productIndex = this.products.findIndex(
-      (product) => product.id == id
-    );
+    const productIndex = this.findIndexById(id);
 
-    this.products[productIndex] = this.data;
+    if (productIndex === -1) {
+      throw new ProductValidationError(
+        `Product with ID ${id} not found`
+      );
+    }
+
+    const validatedProduct = this.validate({
+      ...this.products[productIndex],
+      ...data
+    });
+
+    this.products[productIndex] = validatedProduct;
   }
 
   delete(id) {
-    const productIndex = this.products.findIndex(
-      (product) => product.id == id
+    const product = this.products.find(
+      (product) => product.id === id
     );
+
+    if (!product) {
+      throw new ProductValidationError(
+        `Cannot find id ${id}`
+      );
+    }
+
+    this.products = this.products.filter(
+      (product) => product.id !== id
+    );
+
+    return product;
   }
 }

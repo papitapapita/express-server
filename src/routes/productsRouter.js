@@ -2,6 +2,7 @@ import express from 'express';
 import { ProductsService } from '../services/productsService.js';
 import { tryCatch } from '../utils/tryCatch.js';
 import logger from '../middleware/logger.js';
+import { deletePost } from '../controllers/deleteController.js';
 
 const router = express.Router();
 const productsService = new ProductsService();
@@ -83,24 +84,6 @@ router.patch('/:id', (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
-  try {
-    console.log('Hi');
-    const { id } = req.params;
-    const productIndex = products.findIndex(
-      (product) => product.id == id
-    );
-
-    if (productIndex == -1) res.status(400);
-
-    products.splice(productIndex, 1);
-    res.json({
-      message: 'deleted',
-      id
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
+router.delete('/:id', deletePost);
 
 export default router;
