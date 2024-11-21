@@ -1,20 +1,21 @@
 import express from 'express';
 import { ProductsService } from '../services/productsService.js';
 import { tryCatch } from '../utils/tryCatch.js';
+import logger from '../middleware/logger.js';
 
 const router = express.Router();
 const productsService = new ProductsService();
 const { products } = productsService;
 
-router.get('/', (req, res) => {
+router.get('/', logger, (req, res) => {
   let { size } = req.query;
   size = parseInt(size);
 
   if (size >= products.length || !size) {
-    res.json(products);
-  } else {
-    res.json(productsService.getProducts(size));
+    return res.json(products);
   }
+
+  res.json(productsService.getProducts(size));
 });
 
 router.get('/:id', (req, res) => {
@@ -22,10 +23,9 @@ router.get('/:id', (req, res) => {
   const product = productsService.getProductById(id);
 
   if (!product) {
-    res.status(404).json({
-      message: 'not found'
+    return res.status(404).json({
+      message: `id ${id} not found`
     });
-    return;
   }
 
   res.status(200).json(product);
@@ -65,8 +65,7 @@ router.patch('/:id', (req, res) => {
     );
 
     if (productIndex == -1) {
-      res.status(400);
-      return;
+      return res.status(400);
     }
 
     const { body } = req;

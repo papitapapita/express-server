@@ -64,8 +64,15 @@ export class ProductsService {
       (product) => product.id == id
     );
 
-    this.products[productIndex] =
-      this.verifyProduct(product);
+    if (productIndex === -1) {
+      throw new Error(`Product with ID ${id} not found`);
+    }
+
+    const verifiedProduct = this.verifyProduct(product);
+    this.products[productIndex] = {
+      id,
+      ...verifiedProduct
+    };
   }
 
   update(id, data) {
