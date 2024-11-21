@@ -1,36 +1,13 @@
 import express from 'express';
-import { ProductsService } from '../services/productsService.js';
-import { tryCatch } from '../utils/tryCatch.js';
-import logger from '../middleware/logger.js';
-import { deletePost } from '../controllers/deleteController.js';
+import { deleteProduct } from '../controllers/deleteController.js';
+import { getProduct, getProducts } from '../controllers/getController.js';
+import validate from '../middleware/validate.js';
+import { idSchema } from '../utils/schemas.js';
 
 const router = express.Router();
-const productsService = new ProductsService();
-const { products } = productsService;
 
-router.get('/', logger, (req, res) => {
-  let { size } = req.query;
-  size = parseInt(size);
-
-  if (size >= products.length || !size) {
-    return res.json(products);
-  }
-
-  res.json(productsService.getProducts(size));
-});
-
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const product = productsService.getProductById(id);
-
-  if (!product) {
-    return res.status(404).json({
-      message: `id ${id} not found`
-    });
-  }
-
-  res.status(200).json(product);
-});
+router.get('/', getProducts);
+router.get('/:id', validate(idSchema, 'params'), getProduct);
 
 router.post('/', (req, res) => {
   tryCatch(res, () => {
@@ -61,9 +38,7 @@ router.put('/:id', (req, res) => {
 router.patch('/:id', (req, res) => {
   try {
     const { id } = req.params;
-    const productIndex = products.findIndex(
-      (product) => product.id == id
-    );
+    const productIndex = products.findIndex((product) => product.id == id);
 
     if (productIndex == -1) {
       return res.status(400);
@@ -84,6 +59,6 @@ router.patch('/:id', (req, res) => {
   }
 });
 
-router.delete('/:id', deletePost);
+router.delete('/:id', validate(idSchema, 'params'), deleteProduct);
 
 export default router;

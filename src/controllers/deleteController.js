@@ -1,23 +1,21 @@
 import { tryCatch } from '../utils/tryCatch.js';
-import { ProductsService } from '../services/productsService.js';
-
-const productsService = new ProductsService();
+import { productsService } from '../services/productsService.js';
 
 /**
  * @description delete product
  * @route       DELETE /api/v1/products/:id
  */
-function deletePost(req, res, next) {
-  tryCatch(() => {
-    const { id } = req.params;
+const deleteProduct = tryCatch(async (req, res, next) => {
+  const { id } = req.params;
 
-    productsService.delete(id);
+  const deletedProduct = productsService.delete(
+    parseInt(id)
+  );
 
-    res.json({
-      message: 'deleted',
-      id
-    });
+  res.status(200).json({
+    message: 'Product deleted succesfully',
+    deletedProduct
   });
-}
+});
 
-export { deletePost };
+export { deleteProduct };

@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { Product } from '../models/product.js';
 import { ProductValidationError } from '../errors/errors.js';
 
-export class ProductsService {
+class ProductsService {
   constructor(products = this.generate()) {
     this.products =
       products.length > 0 ? products : this.generate();
@@ -12,9 +12,9 @@ export class ProductsService {
     const products = [];
 
     for (let i = 0; i < 100; i++) {
-      this.products.push(
+      products.push(
         new Product(
-          i,
+          i + 1,
           faker.commerce.productName(),
           parseInt(faker.commerce.price()),
           faker.image.url()
@@ -120,3 +120,6 @@ export class ProductsService {
     return product;
   }
 }
+
+const productsService = new ProductsService();
+export { productsService, ProductsService };
