@@ -4,7 +4,8 @@ const methodColors = {
   GET: 'green',
   POST: 'blue',
   PUT: 'yellow',
-  DELETE: 'red'
+  DELETE: 'red',
+  PATCH: 'magenta'
 };
 
 function logger(req, res, next) {

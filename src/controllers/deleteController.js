@@ -8,7 +8,7 @@ import { productsService } from '../services/productsService.js';
 const deleteProduct = tryCatch(async (req, res, next) => {
   const { id } = req.params;
 
-  const deletedProduct = productsService.delete(
+  const deletedProduct = await productsService.delete(
     parseInt(id)
   );
 

@@ -1,64 +1,52 @@
 import express from 'express';
-import { deleteProduct } from '../controllers/deleteController.js';
-import { getProduct, getProducts } from '../controllers/getController.js';
 import validate from '../middleware/validate.js';
-import { idSchema } from '../utils/schemas.js';
+import { deleteProduct } from '../controllers/deleteController.js';
+import {
+  idSchema,
+  productSchema,
+  softProductSchema
+} from '../utils/schemas.js';
+import {
+  getProduct,
+  getProducts
+} from '../controllers/getController.js';
+import { createProduct } from '../controllers/postController.js';
+import { replaceProduct } from '../controllers/putController.js';
+import { editProduct } from '../controllers/patchController.js';
 
 const router = express.Router();
 
 router.get('/', getProducts);
-router.get('/:id', validate(idSchema, 'params'), getProduct);
+router.get(
+  '/:id',
+  validate(idSchema, 'params'),
+  getProduct
+);
 
-router.post('/', (req, res) => {
-  tryCatch(res, () => {
-    const { body } = req;
-    productsService.createProduct(body);
+router.post(
+  '/',
+  validate(productSchema, 'body'),
+  createProduct
+);
 
-    res.status(201).json({
-      message: 'created',
-      data: body
-    });
-  });
-});
+router.put(
+  '/:id',
+  validate(idSchema, 'params'),
+  validate(productSchema, 'body'),
+  replaceProduct
+);
 
-router.put('/:id', (req, res) => {
-  tryCatch(res, () => {
-    const { id } = req.params;
-    const { body } = req;
+router.patch(
+  '/:id',
+  validate(idSchema, 'params'),
+  validate(softProductSchema, 'body'),
+  editProduct
+);
 
-    productsService.replaceProduct(id, body);
-
-    res.status(214).json({
-      message: 'modified',
-      data: body
-    });
-  });
-});
-
-router.patch('/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    const productIndex = products.findIndex((product) => product.id == id);
-
-    if (productIndex == -1) {
-      return res.status(400);
-    }
-
-    const { body } = req;
-
-    for (const prop in body) {
-      products[productIndex][prop] = body[prop];
-    }
-
-    res.status(214).json({
-      message: 'modified',
-      data: products[productIndex]
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-router.delete('/:id', validate(idSchema, 'params'), deleteProduct);
+router.delete(
+  '/:id',
+  validate(idSchema, 'params'),
+  deleteProduct
+);
 
 export default router;

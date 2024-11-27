@@ -9,7 +9,7 @@ const { products } = productsService;
  */
 const getProduct = tryCatch(async (req, res, next) => {
   const { id } = req.params;
-  const product = productsService.findById(id);
+  const product = await productsService.findById(id);
 
   if (!product) {
     return res.status(404).json({
@@ -28,7 +28,7 @@ const getProducts = tryCatch(async (req, res, next) => {
     return res.json(products);
   }
 
-  res.json(productsService.getAll(size));
+  res.json(await productsService.getAll(size));
 });
 
 export { getProduct, getProducts };

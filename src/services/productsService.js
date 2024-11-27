@@ -25,17 +25,17 @@ class ProductsService {
     return products;
   }
 
-  getAll(amount) {
+  async getAll(amount) {
     return this.products.slice(0, amount);
   }
 
-  findById(id) {
+  async findById(id) {
     return this.products.find(
       (product) => product.id === id
     );
   }
 
-  findIndexById(id) {
+  async findIndexById(id) {
     return this.products.findIndex(
       (product) => product.id === id
     );
@@ -64,13 +64,19 @@ class ProductsService {
     return product;
   }
 
-  create(product) {
-    const validatedProduct = this.validate(product);
+  async create(product) {
+    const createdProduct = {
+      id: this.products.length + 1,
+      ...product
+    };
+    const validatedProduct = this.validate(createdProduct);
     this.products.push(validatedProduct);
+
+    return validatedProduct;
   }
 
-  replace(id, product) {
-    const productIndex = this.findIndexById(id);
+  async replace(id, product) {
+    const productIndex = await this.findIndexById(id);
 
     if (productIndex === -1) {
       throw new ProductValidationError(
@@ -85,8 +91,8 @@ class ProductsService {
     this.products[productIndex] = validatedProduct;
   }
 
-  update(id, data) {
-    const productIndex = this.findIndexById(id);
+  async update(id, data) {
+    const productIndex = await this.findIndexById(id);
 
     if (productIndex === -1) {
       throw new ProductValidationError(
@@ -100,12 +106,12 @@ class ProductsService {
     });
 
     this.products[productIndex] = validatedProduct;
+
+    return validatedProduct;
   }
 
-  delete(id) {
-    const product = this.products.find(
-      (product) => product.id === id
-    );
+  async delete(id) {
+    const product = await this.findById(id);
 
     if (!product) {
       throw new ProductValidationError(
