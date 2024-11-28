@@ -1,3 +1,4 @@
+import boom from '@hapi/boom';
 import { faker } from '@faker-js/faker';
 import { Product } from '../models/product.js';
 import { ProductValidationError } from '../errors/errors.js';
@@ -46,7 +47,7 @@ class ProductsService {
     const productKeys = Object.keys(product);
 
     if (productKeys.length > requiredProperties.length) {
-      throw new ProductValidationError(
+      throw boom.entityTooLarge(
         `Too many properties: ${productKeys}`
       );
     }
@@ -55,7 +56,7 @@ class ProductsService {
       if (
         !Object.prototype.hasOwnProperty.call(product, prop)
       ) {
-        throw new ProductValidationError(
+        throw boom.expectationFailed(
           `Missing property: ${prop}`
         );
       }
@@ -79,7 +80,7 @@ class ProductsService {
     const productIndex = await this.findIndexById(id);
 
     if (productIndex === -1) {
-      throw new ProductValidationError(
+      throw boom.notFound(
         `Product with ID ${id} not found`
       );
     }

@@ -1,14 +1,16 @@
+import boom from '@hapi/boom';
+
 function errorHandler(err, req, res, next) {
   console.error(err);
 
   const status = err.status || 500;
   const message = err.message || 'Something went wrong';
 
-  if (err.name === 'ProductValidationError') {
-    return res.status(400).json({
-      error: 'Validation Error',
-      message: err.message
-    });
+  if (err.isBoom) {
+    const { output } = err;
+    return res
+      .status(output.statusCode)
+      .json(output.payload);
   }
 
   res.status(status).json({
