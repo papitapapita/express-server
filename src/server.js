@@ -20,6 +20,8 @@ app.get('/about', (req, res) => {
 routerApi(app);
 app.use(errorHandler);
 
+//console.log(app._router.stack);
+
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
 });

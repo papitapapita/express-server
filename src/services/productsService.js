@@ -18,7 +18,8 @@ class ProductsService {
           i + 1,
           faker.commerce.productName(),
           parseInt(faker.commerce.price()),
-          faker.image.url()
+          faker.image.url(),
+          faker.datatype.boolean()
         )
       );
     }
@@ -96,7 +97,7 @@ class ProductsService {
     const productIndex = await this.findIndexById(id);
 
     if (productIndex === -1) {
-      throw new ProductValidationError(
+      throw boom.notFound(
         `Product with ID ${id} not found`
       );
     }
@@ -115,8 +116,8 @@ class ProductsService {
     const product = await this.findById(id);
 
     if (!product) {
-      throw new ProductValidationError(
-        `Cannot find id ${id}`
+      throw boom.notFound(
+        `Product with ID ${id} not found`
       );
     }
 
