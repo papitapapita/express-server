@@ -7,7 +7,7 @@
   ],
   "builds": [
     {
-      "src": "/api/server.js"
+      "src": "/api/"
     }
   ]
 }
