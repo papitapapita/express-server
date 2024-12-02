@@ -10,7 +10,18 @@ const { dirname } = import.meta;
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+const whitelist = ['http://localhost:5500'];
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin not allowed'));
+    }
+  }
+};
+
+app.use(cors(options));
 app.use(express.json());
 app.use(express.static(path.join(dirname, 'public')));
 app.use(logger);
