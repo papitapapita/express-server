@@ -2,11 +2,11 @@
   "name": "express-server",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/server.js",
+  "main": "./api/server.js",
   "type": "module",
   "scripts": {
-    "start": "node ./src/server.js",
-    "dev": "node --watch --env-file=.env ./src/server.js",
+    "start": "node ./api/server.js",
+    "dev": "node --watch --env-file=.env ./api/server.js",
     "lint": "eslint ./*/**.js;",
     "format": "prettier --write ./*/**.js"
   },
@@ -25,6 +25,7 @@
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
     "@hapi/boom": "^10.0.1",
+    "@vercel/speed-insights": "^1.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "joi": "^17.13.3"
