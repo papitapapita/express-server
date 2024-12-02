@@ -33,6 +33,10 @@ app.get('/api/about', (req, res) => {
   res.sendFile(path.join(dirname, 'public', 'about.html'));
 });
 
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from the API!' });
+});
+
 routerApi(app);
 app.use(errorHandler);
 
