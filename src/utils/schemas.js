@@ -4,18 +4,23 @@ const idSchema = Joi.object({
   id: Joi.number().positive().integer().required()
 });
 
+const name = Joi.string().min(3).max(50);
+const price = Joi.number().positive();
+const image = Joi.string().uri().optional();
+const isBlocked = Joi.boolean();
+
 const productSchema = Joi.object({
-  name: Joi.string().min(3).max(50).required(),
-  price: Joi.number().positive().required(),
-  image: Joi.string().uri().optional(),
-  isBlocked: Joi.boolean().required()
+  name: name.required(),
+  price: price.required(),
+  image,
+  isBlocked: isBlocked.required()
 });
 
 const softProductSchema = Joi.object({
-  name: Joi.string().min(3).max(50).optional(),
-  price: Joi.number().positive().optional(),
-  image: Joi.string().uri().optional(),
-  isBlocked: Joi.boolean().optional()
+  name: name.optional(),
+  price: price.optional(),
+  image,
+  isBlocked: isBlocked.optional()
 }).or('name', 'price', 'image', 'isBlocked');
 
 export { idSchema, productSchema, softProductSchema };
