@@ -1,3 +1,4 @@
+import { categoriesService } from '../services/categoriesService.js';
 import { productsService } from '../services/productsService.js';
 import { tryCatch } from '../utils/tryCatch.js';
 
@@ -15,4 +16,14 @@ const createProduct = tryCatch(async (req, res, next) => {
   });
 });
 
-export { createProduct };
+const createCategory = tryCatch(async (req, res, next) => {
+  const { body } = req;
+  const category = await categoriesService.create(body);
+
+  res.status(201).json({
+    message: 'created',
+    data: category
+  });
+});
+
+export { createProduct, createCategory };

@@ -23,4 +23,20 @@ const softProductSchema = Joi.object({
   isBlocked: isBlocked.optional()
 }).or('name', 'price', 'image', 'isBlocked');
 
-export { idSchema, productSchema, softProductSchema };
+const categorySchema = Joi.object({
+  name: name.required(),
+  image
+});
+
+const softCategorySchema = Joi.object({
+  name: name.optional(),
+  image
+}).or('name', 'image');
+
+export {
+  idSchema,
+  productSchema,
+  softProductSchema,
+  categorySchema,
+  softCategorySchema
+};
