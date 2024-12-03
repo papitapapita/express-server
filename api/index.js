@@ -16,6 +16,7 @@ const whitelist = [
   'http://localhost:5500',
   'http://localhost:3000'
 ];
+
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
@@ -25,6 +26,8 @@ const options = {
     }
   }
 };
+
+app.disable('x-powered-by');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -48,7 +51,9 @@ app.get('/api/hello', (req, res) => {
 routerApi(app);
 app.use(errorHandler);
 
-//console.log(app._router.stack);
+app.use((req, res) => {
+  res.status(404).send('Not Found');
+});
 
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
