@@ -15,7 +15,7 @@ class CategoriesService {
       categories.push(
         new Category(
           i + 1,
-          faker.commerce.categoryAdjective(),
+          faker.commerce.productAdjective(),
           faker.image.url()
         )
       );
@@ -24,8 +24,8 @@ class CategoriesService {
     return categories;
   }
 
-  async getAll(amount) {
-    return this.categories.slice(0, amount);
+  async getAll(limit = this.categories.length) {
+    return this.categories.slice(0, limit);
   }
 
   async findById(id) {
