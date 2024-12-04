@@ -2,15 +2,17 @@ import { tryCatch } from '../utils/tryCatch.js';
 import { productsService } from '../services/productsService.js';
 import { categoriesService } from '../services/categoriesService.js';
 import boom from '@hapi/boom';
+import { usersService } from '../services/usersService.js';
 
 const { products } = productsService;
 const { categories } = categoriesService;
+const { users } = usersService;
 
 /**
  * @description gets a specific product
  * @route       /api/v1/products
  */
-const getProduct = tryCatch(async (req, res, next) => {
+const getProduct = tryCatch(async (req, res) => {
   const { id } = req.params;
   const product = await productsService.findById(id);
 
@@ -21,7 +23,7 @@ const getProduct = tryCatch(async (req, res, next) => {
   res.json(product);
 });
 
-const getProducts = tryCatch(async (req, res, next) => {
+const getProducts = tryCatch(async (req, res) => {
   let { size } = req.query;
   size = parseInt(size);
 
@@ -32,7 +34,7 @@ const getProducts = tryCatch(async (req, res, next) => {
   res.json(await productsService.getAll(size));
 });
 
-const getCategories = tryCatch(async (req, res, next) => {
+const getCategories = tryCatch(async (req, res) => {
   let { size } = req.query;
   size = parseInt(size);
 
@@ -44,8 +46,6 @@ const getCategories = tryCatch(async (req, res, next) => {
 });
 
 const getCategory = tryCatch(async (req, res) => {
-  console.log('Im here');
-
   let { id } = req.params;
   const category = await categoriesService.findById(id);
 
@@ -56,9 +56,33 @@ const getCategory = tryCatch(async (req, res) => {
   res.json(category);
 });
 
+const getUsers = tryCatch(async (req, res) => {
+  let { size } = req.query;
+  size = parseInt(size);
+
+  if (size >= users.length || !size) {
+    return res.json(users);
+  }
+
+  res.json(await usersService.getAll(size));
+});
+
+const getUser = tryCatch(async (req, res) => {
+  const { id } = req.params;
+  const user = usersService.findById(id);
+
+  if (!user) {
+    throw boom.notFound(`id ${id} not found`);
+  }
+
+  res.json(user);
+});
+
 export {
   getProduct,
   getProducts,
   getCategories,
-  getCategory
+  getCategory,
+  getUsers,
+  getUser
 };

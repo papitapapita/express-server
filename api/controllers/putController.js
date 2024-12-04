@@ -1,8 +1,9 @@
 import { categoriesService } from '../services/categoriesService.js';
 import { productsService } from '../services/productsService.js';
+import { usersService } from '../services/usersService.js';
 import { tryCatch } from '../utils/tryCatch.js';
 
-const replaceProduct = tryCatch(async (req, res, next) => {
+const replaceProduct = tryCatch(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
@@ -14,7 +15,7 @@ const replaceProduct = tryCatch(async (req, res, next) => {
   });
 });
 
-const replaceCategory = tryCatch(async (req, res, next) => {
+const replaceCategory = tryCatch(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
@@ -26,4 +27,16 @@ const replaceCategory = tryCatch(async (req, res, next) => {
   });
 });
 
-export { replaceProduct, replaceCategory };
+const replaceUser = tryCatch(async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+
+  await usersService.replace(id, body);
+
+  res.status(214).json({
+    message: 'modified',
+    data: body
+  });
+});
+
+export { replaceProduct, replaceCategory, replaceUser };

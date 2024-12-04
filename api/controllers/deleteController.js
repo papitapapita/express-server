@@ -1,6 +1,7 @@
 import { tryCatch } from '../utils/tryCatch.js';
 import { productsService } from '../services/productsService.js';
 import { categoriesService } from '../services/categoriesService.js';
+import { usersService } from '../services/usersService.js';
 
 /**
  * @description delete product
@@ -24,9 +25,20 @@ const deleteCategory = tryCatch(async (req, res) => {
     await categoriesService.delete(id);
 
   res.json({
-    message: 'Product deteled succesfully',
+    message: 'Category deteled succesfully',
     deletedCategory
   });
 });
 
-export { deleteProduct, deleteCategory };
+const deleteUser = tryCatch(async (req, res) => {
+  const { id } = req.params;
+
+  const deletedUser = await usersService.delete(id);
+
+  res.json({
+    message: 'User deleted succesfully',
+    deletedUser
+  });
+});
+
+export { deleteProduct, deleteCategory, deleteUser };

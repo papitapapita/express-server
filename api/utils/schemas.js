@@ -6,8 +6,13 @@ const idSchema = Joi.object({
 
 const name = Joi.string().min(3).max(50);
 const price = Joi.number().positive();
-const image = Joi.string().uri().optional();
+const image = Joi.string().uri();
 const isBlocked = Joi.boolean();
+const email = Joi.string().email();
+const password = Joi.string().pattern(
+  new RegExp('^[a-zA-Z0-9]{3,30}$')
+);
+const role = Joi.string();
 
 const productSchema = Joi.object({
   name: name.required(),
@@ -17,10 +22,10 @@ const productSchema = Joi.object({
 });
 
 const softProductSchema = Joi.object({
-  name: name.optional(),
-  price: price.optional(),
+  name,
+  price,
   image,
-  isBlocked: isBlocked.optional()
+  isBlocked
 }).or('name', 'price', 'image', 'isBlocked');
 
 const categorySchema = Joi.object({
@@ -29,14 +34,28 @@ const categorySchema = Joi.object({
 });
 
 const softCategorySchema = Joi.object({
-  name: name.optional(),
+  name,
   image
 }).or('name', 'image');
+
+const userSchema = Joi.object({
+  email: email.required(),
+  password: password.required(),
+  role
+});
+
+const softUserSchema = Joi.object({
+  email,
+  password,
+  role
+}).or('email', 'password', 'role');
 
 export {
   idSchema,
   productSchema,
   softProductSchema,
   categorySchema,
-  softCategorySchema
+  softCategorySchema,
+  userSchema,
+  softUserSchema
 };
