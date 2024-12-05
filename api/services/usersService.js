@@ -1,11 +1,13 @@
 import boom from '@hapi/boom';
 import { faker } from '@faker-js/faker';
 import User from '../models/user.js';
-import getConnection from '../libs/pg.js';
+import getConnection from '../libs/postgres.js';
+import pool from '../libs/postgres.js';
 
 class UsersService {
-  constructor(users = this.generate()) {
-    this.users = users.length > 0 ? users : this.generate();
+  constructor() {
+    this.pool = pool;
+    this.pool.on('error', (err) => console.error(err));
   }
 
   generate() {
@@ -26,11 +28,8 @@ class UsersService {
   }
 
   async getAll(limit = this.users.length) {
-    console.log('Imhere');
-    const client = await getConnection();
-    const response = await client.query(
-      'SELECT * FROM task'
-    );
+    const query = 'SELECT * FROM task';
+    const response = await this.pool.query(query);
     console.log(response);
     return response.rows;
   }
