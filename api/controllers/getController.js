@@ -58,13 +58,12 @@ const getCategory = tryCatch(async (req, res) => {
 
 const getUsers = tryCatch(async (req, res) => {
   let { size } = req.query;
-  size = parseInt(size);
+  size = parseInt(size) ?? 0;
 
-  if (size >= users.length || !size) {
-    return res.json(users);
-  }
+  const result = await usersService.getAll(size);
+  console.log(result);
 
-  res.json(await usersService.getAll(size));
+  res.json(result);
 });
 
 const getUser = tryCatch(async (req, res) => {

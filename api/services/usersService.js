@@ -1,6 +1,7 @@
 import boom from '@hapi/boom';
 import { faker } from '@faker-js/faker';
 import User from '../models/user.js';
+import getConnection from '../libs/pg.js';
 
 class UsersService {
   constructor(users = this.generate()) {
@@ -14,8 +15,9 @@ class UsersService {
       users.push(
         new User(
           i + 1,
-          faker.commerce.productAdjective(),
-          faker.image.url()
+          faker.internet.email(),
+          faker.internet.password(),
+          faker.person.jobArea()
         )
       );
     }
@@ -24,7 +26,13 @@ class UsersService {
   }
 
   async getAll(limit = this.users.length) {
-    return this.users.slice(0, limit);
+    console.log('Imhere');
+    const client = await getConnection();
+    const response = await client.query(
+      'SELECT * FROM task'
+    );
+    console.log(response);
+    return response.rows;
   }
 
   async findById(id) {

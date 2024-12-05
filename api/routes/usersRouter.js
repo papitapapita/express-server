@@ -4,7 +4,7 @@ import {
   idSchema,
   userSchema,
   softUserSchema
-} from '../utils/schemas';
+} from '../utils/schemas.js';
 import {
   getUsers,
   getUser
