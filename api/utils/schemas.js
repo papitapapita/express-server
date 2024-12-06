@@ -28,7 +28,7 @@ const image = Joi.string().uri().messages({
   'string.uri': '"image" must be a valid URI.'
 });
 
-const isBlocked = Joi.boolean().messages({
+const isBlocked = Joi.boolean().default(false).messages({
   'boolean.base': '"isBlocked" must be a boolean value.'
 });
 
@@ -60,7 +60,7 @@ const productSchema = Joi.object({
   price: price.required(),
   image,
   isBlocked
-}).unknown();
+});
 
 /**
  * Schema for partially updating a product.
@@ -75,10 +75,7 @@ const softProductSchema = Joi.object({
   price,
   image,
   isBlocked
-})
-  .or('name', 'price', 'image', 'isBlocked')
-  .unknown();
-
+}).or('name', 'price', 'image', 'isBlocked');
 /**
  * Schema for creating a new category.
  * Fields:
@@ -88,7 +85,7 @@ const softProductSchema = Joi.object({
 const categorySchema = Joi.object({
   name: name.required(),
   image
-}).unknown();
+});
 
 /**
  * Schema for partially updating a category.
@@ -99,10 +96,7 @@ const categorySchema = Joi.object({
 const softCategorySchema = Joi.object({
   name,
   image
-})
-  .or('name', 'image')
-  .unknown();
-
+}).or('name', 'image');
 /**
  * Schema for creating a new user.
  * Fields:
@@ -114,7 +108,7 @@ const userSchema = Joi.object({
   email: email.required(),
   password: password.required(),
   role
-}).unknown();
+});
 
 /**
  * Schema for partially updating a user.
@@ -127,10 +121,7 @@ const softUserSchema = Joi.object({
   email,
   password,
   role
-})
-  .or('email', 'password', 'role')
-  .unknown();
-
+}).or('email', 'password', 'role');
 export {
   idSchema,
   productSchema,

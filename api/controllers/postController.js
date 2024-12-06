@@ -9,6 +9,7 @@ import { tryCatch } from '../utils/tryCatch.js';
  */
 const createProduct = tryCatch(async (req, res) => {
   const { body } = req;
+  console.log(body);
   const product = await productsService.create(body);
 
   res.status(201).json({
