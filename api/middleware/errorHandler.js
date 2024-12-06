@@ -1,7 +1,6 @@
 import boom from '@hapi/boom';
 
-function errorHandler(err, req, res, next) {
-  console.log('Hello there');
+function errorHandler(err, req, res) {
   console.error(err);
 
   const status = err.status || 500;
