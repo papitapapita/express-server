@@ -5,6 +5,10 @@ import boom from '@hapi/boom';
 const { categories } = categoriesService;
 
 export default class CategoriesController {
+  /**
+   * @description
+   * @route
+   */
   getCategories() {
     return tryCatch(async (req, res) => {
       let { size } = req.query;
@@ -18,6 +22,10 @@ export default class CategoriesController {
     });
   }
 
+  /**
+   * @description
+   * @route
+   */
   getCategory() {
     return tryCatch(async (req, res) => {
       let { id } = req.params;
@@ -31,6 +39,10 @@ export default class CategoriesController {
     });
   }
 
+  /**
+   * @description
+   * @route
+   */
   createCategory() {
     return tryCatch(async (req, res) => {
       const { body } = req;
@@ -43,6 +55,10 @@ export default class CategoriesController {
     });
   }
 
+  /**
+   * @description
+   * @route
+   */
   replaceCategory() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -57,6 +73,10 @@ export default class CategoriesController {
     });
   }
 
+  /**
+   * @description
+   * @route
+   */
   editCategory() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -74,6 +94,10 @@ export default class CategoriesController {
     });
   }
 
+  /**
+   * @description
+   * @route
+   */
   deleteCategory() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;

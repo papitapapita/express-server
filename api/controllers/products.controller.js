@@ -2,12 +2,10 @@ import { tryCatch } from '../utils/tryCatch.js';
 import { productsService } from '../services/products.js';
 import boom from '@hapi/boom';
 
-const { products } = productsService;
-
 export default class ProductsController {
   /**
-   * @description gets a specific product
-   * @route       /api/v1/products
+   * @description Get a specific product
+   * @route       /api/v1/products/:id
    */
   getProduct() {
     return tryCatch(async (req, res) => {
@@ -15,29 +13,48 @@ export default class ProductsController {
       const product = await productsService.findById(id);
 
       if (!product) {
-        throw boom.notFound(`id ${id} not found`);
+        throw boom.notFound(
+          `Product with ID ${id} not found`
+        );
       }
 
-      res.json(product);
+      res.status(200).json({
+        success: true,
+        message: 'Product Retrieved',
+        data: product
+      });
     });
   }
 
+  /**
+   * @description Get all products
+   * @route       GET /api/v1/products
+   */
   getProducts() {
     return tryCatch(async (req, res) => {
       let { size } = req.query;
-      size = parseInt(size);
 
-      if (size >= products.length || !size) {
-        return res.json(products);
+      if (size) {
+        size = parseInt(size);
+
+        if (isNaN(size) || size < 0) {
+          throw boom.badRequest('Invalid size parameter');
+        }
       }
 
-      res.json(await productsService.getAll(size));
+      const products = await productsService.getAll(size);
+
+      res.status(200).json({
+        succes: true,
+        message: 'Products Retrieved',
+        data: products
+      });
     });
   }
 
   /**
    * @description create product
-   * @route       POST /api/v1/products/
+   * @route       POST /api/v1/products
    */
   createProduct() {
     return tryCatch(async (req, res) => {
@@ -46,12 +63,17 @@ export default class ProductsController {
       const product = await productsService.create(body);
 
       res.status(201).json({
-        message: 'created',
+        succes: true,
+        message: 'Product created',
         data: product
       });
     });
   }
 
+  /**
+   * @description Replace a product
+   * @route       PUT /api/v1/products/:id
+   */
   replaceProduct() {
     tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -59,13 +81,18 @@ export default class ProductsController {
 
       await productsService.replace(id, body);
 
-      res.status(214).json({
-        message: 'modified',
+      res.status(200).json({
+        succes: true,
+        message: 'Product replaced',
         data: body
       });
     });
   }
 
+  /**
+   * @description Edit a product
+   * @route       PATCH /api/v1/products/:id
+   */
   editProduct() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -76,8 +103,9 @@ export default class ProductsController {
         body
       );
 
-      res.status(214).json({
-        message: 'modified',
+      res.status(200).json({
+        succes: true,
+        message: 'Product updated',
         data: product
       });
     });
@@ -95,8 +123,9 @@ export default class ProductsController {
         await productsService.delete(id);
 
       res.status(200).json({
+        succes: true,
         message: 'Product deleted succesfully',
-        deletedProduct
+        data: deletedProduct
       });
     });
   }

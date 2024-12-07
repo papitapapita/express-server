@@ -3,12 +3,16 @@ import { tryCatch } from '../utils/tryCatch.js';
 import boom from '@hapi/boom';
 
 export default class UsersController {
+  /**
+   * @description Get all users
+   * @route       GET /api/v1/users
+   */
   getUsers() {
     return tryCatch(async (req, res) => {
       let { size } = req.query;
 
       if (size) {
-        size = parseInt(size, 10) || 0;
+        size = parseInt(size);
 
         if (isNaN(size) || size < 0) {
           throw boom.badRequest('Invalid size parameter');
@@ -25,6 +29,10 @@ export default class UsersController {
     });
   }
 
+  /**
+   * @description Get a specific user
+   * @route       GET /api/v1/users/:id
+   */
   getUser() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -42,6 +50,10 @@ export default class UsersController {
     });
   }
 
+  /**
+   * @description Create a user
+   * @route       POST /api/v1/users
+   */
   createUser() {
     return tryCatch(async (req, res) => {
       const { body } = req;
@@ -55,6 +67,10 @@ export default class UsersController {
     });
   }
 
+  /**
+   * @description Replace a user
+   * @route       PUT /api/v1/users/:id
+   */
   replaceUser() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -63,12 +79,17 @@ export default class UsersController {
       await usersService.replace(id, body);
 
       res.status(204).json({
-        message: 'modified',
+        succes: true,
+        message: 'User replaced',
         data: body
       });
     });
   }
 
+  /**
+   * @description Edit a user
+   * @route       PATCH /api/v1/users/:id
+   */
   editUser() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
@@ -76,22 +97,28 @@ export default class UsersController {
 
       const user = await usersService.update(id, body);
 
-      res.status(214).json({
-        message: 'modified',
+      res.status(200).json({
+        succes: true,
+        message: 'User updated',
         data: user
       });
     });
   }
 
+  /**
+   * @description Delete a user
+   * @route       DELETE /api/v1/users/:id
+   */
   deleteUser() {
     return tryCatch(async (req, res) => {
       const { id } = req.params;
 
       const deletedUser = await usersService.delete(id);
 
-      res.json({
+      res.status(200).json({
+        succes: true,
         message: 'User deleted succesfully',
-        deletedUser
+        data: deletedUser
       });
     });
   }
