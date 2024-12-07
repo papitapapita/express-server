@@ -2,29 +2,37 @@ import { tryCatch } from '../utils/tryCatch.js';
 import { categoriesService } from '../services/categories.js';
 import boom from '@hapi/boom';
 
-const { categories } = categoriesService;
-
 export default class CategoriesController {
   /**
-   * @description
-   * @route
+   * @description Get all categories
+   * @route       /api/v1/categories
    */
   getCategories() {
     return tryCatch(async (req, res) => {
       let { size } = req.query;
-      size = parseInt(size);
 
-      if (size >= categories.length || !size) {
-        return res.json(categories);
+      if (size) {
+        size = parseInt(size);
+
+        if (isNaN(size) || size < 0) {
+          throw boom.badRequest('Invalid size parameter');
+        }
       }
 
-      res.json(await categoriesService.getAll(size));
+      const categories =
+        await categoriesService.getAll(size);
+
+      res.status(200).json({
+        success: true,
+        message: 'Categories Retrieved',
+        data: categories
+      });
     });
   }
 
   /**
-   * @description
-   * @route
+   * @description Get a specific category
+   * @route       /api/v1/categories/:id
    */
   getCategory() {
     return tryCatch(async (req, res) => {
@@ -35,13 +43,17 @@ export default class CategoriesController {
         throw boom.notFound(`id ${id} not found`);
       }
 
-      res.json(category);
+      res.json({
+        success: true,
+        message: 'Category retrieved',
+        data: category
+      });
     });
   }
 
   /**
-   * @description
-   * @route
+   * @description Create a category
+   * @route       /api/v1/categories
    */
   createCategory() {
     return tryCatch(async (req, res) => {
@@ -49,15 +61,16 @@ export default class CategoriesController {
       const category = await categoriesService.create(body);
 
       res.status(201).json({
-        message: 'created',
+        success: true,
+        message: 'Category created',
         data: category
       });
     });
   }
 
   /**
-   * @description
-   * @route
+   * @description Replace a category
+   * @route       /api/v1/categories/:id
    */
   replaceCategory() {
     return tryCatch(async (req, res) => {
@@ -66,16 +79,17 @@ export default class CategoriesController {
 
       await categoriesService.replace(id, body);
 
-      res.status(214).json({
-        message: 'modifed',
+      res.status(200).json({
+        success: true,
+        message: 'Category replaced',
         data: body
       });
     });
   }
 
   /**
-   * @description
-   * @route
+   * @description Edit a category
+   * @route       /api/v1/categories/:id
    */
   editCategory() {
     return tryCatch(async (req, res) => {
@@ -87,16 +101,17 @@ export default class CategoriesController {
         body
       );
 
-      res.status(214).json({
-        message: 'modified',
+      res.status(200).json({
+        success: true,
+        message: 'Category updated',
         data: category
       });
     });
   }
 
   /**
-   * @description
-   * @route
+   * @description Delete a category
+   * @route       /api/v1/categories/:id
    */
   deleteCategory() {
     return tryCatch(async (req, res) => {
@@ -105,9 +120,10 @@ export default class CategoriesController {
       const deletedCategory =
         await categoriesService.delete(id);
 
-      res.json({
-        message: 'Category deteled succesfully',
-        deletedCategory
+      res.status(200).json({
+        success: true,
+        message: 'Category deleted',
+        data: deletedCategory
       });
     });
   }

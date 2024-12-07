@@ -45,7 +45,7 @@ export default class ProductsController {
       const products = await productsService.getAll(size);
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: 'Products Retrieved',
         data: products
       });
@@ -63,7 +63,7 @@ export default class ProductsController {
       const product = await productsService.create(body);
 
       res.status(201).json({
-        succes: true,
+        success: true,
         message: 'Product created',
         data: product
       });
@@ -82,7 +82,7 @@ export default class ProductsController {
       await productsService.replace(id, body);
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: 'Product replaced',
         data: body
       });
@@ -104,7 +104,7 @@ export default class ProductsController {
       );
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: 'Product updated',
         data: product
       });
@@ -123,7 +123,7 @@ export default class ProductsController {
         await productsService.delete(id);
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: 'Product deleted succesfully',
         data: deletedProduct
       });

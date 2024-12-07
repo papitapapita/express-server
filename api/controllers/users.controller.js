@@ -60,7 +60,7 @@ export default class UsersController {
       const user = await usersService.create(body);
 
       res.status(201).json({
-        succes: true,
+        success: true,
         message: 'User created',
         data: user
       });
@@ -79,7 +79,7 @@ export default class UsersController {
       await usersService.replace(id, body);
 
       res.status(204).json({
-        succes: true,
+        success: true,
         message: 'User replaced',
         data: body
       });
@@ -98,7 +98,7 @@ export default class UsersController {
       const user = await usersService.update(id, body);
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: 'User updated',
         data: user
       });
@@ -116,7 +116,7 @@ export default class UsersController {
       const deletedUser = await usersService.delete(id);
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: 'User deleted succesfully',
         data: deletedUser
       });
