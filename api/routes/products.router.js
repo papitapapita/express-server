@@ -18,37 +18,37 @@ const {
   deleteProduct
 } = productsController;
 
-router.get('/', getProducts);
+router.get('/', getProducts());
 router.get(
   '/:id',
   validate(idSchema, 'params'),
-  getProduct
+  getProduct()
 );
 
 router.post(
   '/',
   validate(productSchema, 'body'),
-  createProduct
+  createProduct()
 );
 
 router.put(
   '/:id',
   validate(idSchema, 'params'),
   validate(productSchema, 'body'),
-  replaceProduct
+  replaceProduct()
 );
 
 router.patch(
   '/:id',
   validate(idSchema, 'params'),
   validate(softProductSchema, 'body'),
-  editProduct
+  editProduct()
 );
 
 router.delete(
   '/:id',
   validate(idSchema, 'params'),
-  deleteProduct
+  deleteProduct()
 );
 
 export default router;

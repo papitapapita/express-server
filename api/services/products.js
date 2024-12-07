@@ -1,7 +1,6 @@
 import boom from '@hapi/boom';
 import { faker } from '@faker-js/faker';
 import { Product } from '../models/product.js';
-import { ProductValidationError } from '../errors/errors.js';
 
 class ProductsService {
   constructor(products = this.generate()) {

@@ -19,28 +19,32 @@ const {
 } = usersController;
 
 router.get('/', getUsers);
-router.get('/:id', validate(idSchema, 'params'), getUser);
+router.get('/:id', validate(idSchema, 'params'), getUser());
 
-router.post('/', validate(userSchema, 'body'), createUser);
+router.post(
+  '/',
+  validate(userSchema, 'body'),
+  createUser()
+);
 
 router.put(
   '/:id',
   validate(idSchema, 'params'),
   validate(userSchema, 'body'),
-  replaceUser
+  replaceUser()
 );
 
 router.patch(
   '/:id',
   validate(idSchema, 'params'),
   validate(softUserSchema, 'body'),
-  editUser
+  editUser()
 );
 
 router.delete(
   '/:id',
   validate(idSchema, 'params'),
-  deleteUser
+  deleteUser()
 );
 
 export default router;

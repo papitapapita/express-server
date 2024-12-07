@@ -75,7 +75,7 @@ export default class ProductsController {
    * @route       PUT /api/v1/products/:id
    */
   replaceProduct() {
-    tryCatch(async (req, res) => {
+    return tryCatch(async (req, res) => {
       const { id } = req.params;
       const { body } = req;
 

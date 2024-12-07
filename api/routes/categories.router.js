@@ -22,33 +22,33 @@ router.get('/', getCategories);
 router.get(
   '/:id',
   validate(idSchema, 'params'),
-  getCategory
+  getCategory()
 );
 
 router.post(
   '/',
   validate(categorySchema, 'body'),
-  createCategory
+  createCategory()
 );
 
 router.put(
   '/:id',
   validate(idSchema, 'params'),
   validate(categorySchema, 'body'),
-  replaceCategory
+  replaceCategory()
 );
 
 router.patch(
   '/:id',
   validate(idSchema, 'params'),
   validate(softCategorySchema, 'body'),
-  editCategory
+  editCategory()
 );
 
 router.delete(
   '/:id',
   validate(idSchema, 'params'),
-  deleteCategory
+  deleteCategory()
 );
 
 export default router;
