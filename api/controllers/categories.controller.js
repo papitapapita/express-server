@@ -4,7 +4,7 @@ import boom from '@hapi/boom';
 
 const { categories } = categoriesService;
 
-export default class CategoryController {
+export default class CategoriesController {
   getCategories() {
     return tryCatch(async (req, res) => {
       let { size } = req.query;

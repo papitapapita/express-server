@@ -9,9 +9,8 @@ const idSchema = Joi.object({
   id: Joi.number().positive().integer().required()
 });
 
-/**
- * Common field validations reused across schemas.
- */
+//Common field validations reused across schemas.
+
 const name = Joi.string().min(3).max(50).messages({
   'string.base': '"name" must be a string.',
   'string.empty': '"name" cannot be empty.',

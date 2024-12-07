@@ -1,20 +1,22 @@
 import express from 'express';
 import validate from '../middleware/validate.js';
-import { deleteProduct } from '../controllers/delete.js';
+import ProductsController from '../controllers/products.controller.js';
 import {
   idSchema,
   productSchema,
   softProductSchema
 } from '../utils/schemas.js';
-import {
-  getProduct,
-  getProducts
-} from '../controllers/get.js';
-import { createProduct } from '../controllers/post.js';
-import { replaceProduct } from '../controllers/put.js';
-import { editProduct } from '../controllers/patch.js';
 
 const router = express.Router();
+const productsController = new ProductsController();
+const {
+  getProduct,
+  getProducts,
+  createProduct,
+  editProduct,
+  replaceProduct,
+  deleteProduct
+} = productsController;
 
 router.get('/', getProducts);
 router.get(

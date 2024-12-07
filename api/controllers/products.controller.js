@@ -4,7 +4,7 @@ import boom from '@hapi/boom';
 
 const { products } = productsService;
 
-export default class productController {
+export default class ProductsController {
   /**
    * @description gets a specific product
    * @route       /api/v1/products

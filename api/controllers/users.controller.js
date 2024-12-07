@@ -2,7 +2,7 @@ import { usersService } from '../services/users.js';
 import { tryCatch } from '../utils/tryCatch.js';
 import boom from '@hapi/boom';
 
-export default class UserController {
+export default class UsersController {
   getUsers() {
     return tryCatch(async (req, res) => {
       let { size } = req.query;
@@ -17,13 +17,11 @@ export default class UserController {
 
       const result = await usersService.getAll(size);
 
-      res
-        .status(200)
-        .json({
-          succes: true,
-          message: 'Users retrieved',
-          data: result
-        });
+      res.status(200).json({
+        succes: true,
+        message: 'Users retrieved',
+        data: result
+      });
     });
   }
 
@@ -33,10 +31,14 @@ export default class UserController {
       const user = await usersService.findById(id);
 
       if (!user) {
-        throw boom.notFound(`id ${id} not found`);
+        throw boom.notFound(`User with ID ${id} not found`);
       }
 
-      res.json(user);
+      res.status(200).json({
+        succes: true,
+        message: 'User retrieved',
+        data: user
+      });
     });
   }
 
@@ -46,7 +48,8 @@ export default class UserController {
       const user = await usersService.create(body);
 
       res.status(201).json({
-        message: 'created',
+        succes: true,
+        message: 'User created',
         data: user
       });
     });

@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
-import { routerApi } from './routes/index.js';
+import { routerApi } from './routes/index.router.js';
 import logger from './middleware/logger.js';
 import errorHandler from './middleware/errorHandler.js';
 import corsMiddleware from './utils/cors.js';

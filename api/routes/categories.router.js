@@ -1,20 +1,22 @@
 import { Router } from 'express';
 import validate from '../middleware/validate.js';
+import CategoriesController from '../controllers/categories.controller.js';
 import {
   categorySchema,
   idSchema,
   softCategorySchema
 } from '../utils/schemas.js';
-import { createCategory } from '../controllers/post.js';
-import { replaceCategory } from '../controllers/put.js';
-import { editCategory } from '../controllers/patch.js';
-import {
-  getCategory,
-  getCategories
-} from '../controllers/get.js';
-import { deleteCategory } from '../controllers/delete.js';
 
 const router = Router();
+const categoriesController = new CategoriesController();
+const {
+  getCategory,
+  getCategories,
+  createCategory,
+  editCategory,
+  replaceCategory,
+  deleteCategory
+} = categoriesController;
 
 router.get('/', getCategories);
 router.get(

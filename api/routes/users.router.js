@@ -1,17 +1,22 @@
 import { Router } from 'express';
 import validate from '../middleware/validate.js';
+import UsersController from '../controllers/users.controller.js';
 import {
   idSchema,
   userSchema,
   softUserSchema
 } from '../utils/schemas.js';
-import { getUsers, getUser } from '../controllers/get.js';
-import { createUser } from '../controllers/post.js';
-import { replaceUser } from '../controllers/put.js';
-import { editUser } from '../controllers/patch.js';
-import { deleteUser } from '../controllers/delete.js';
 
 const router = Router();
+const usersController = new UsersController();
+const {
+  getUser,
+  getUsers,
+  createUser,
+  replaceUser,
+  editUser,
+  deleteUser
+} = usersController;
 
 router.get('/', getUsers);
 router.get('/:id', validate(idSchema, 'params'), getUser);
